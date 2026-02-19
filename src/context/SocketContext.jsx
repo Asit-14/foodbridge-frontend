@@ -14,7 +14,8 @@ export function SocketProvider({ children }) {
     if (!isAuthenticated) return;
 
     const token = localStorage.getItem('accessToken');
-    const socket = io('/', {
+    const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || '/';
+    const socket = io(SOCKET_URL, {
       auth: { token },
       transports: ['websocket', 'polling'],
     });
