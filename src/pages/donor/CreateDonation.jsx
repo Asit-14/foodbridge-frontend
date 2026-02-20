@@ -121,7 +121,7 @@ export default function CreateDonation() {
         {/* ── Category picker ── */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
-          <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat.value}

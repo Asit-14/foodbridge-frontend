@@ -54,9 +54,9 @@ export function AuthProvider({ children }) {
 
   const register = async (formData) => {
     const { data } = await authService.register(formData);
-    localStorage.setItem('accessToken', data.accessToken);
-    dispatch({ type: 'AUTH_LOADED', payload: data.data.user });
-    return data.data.user;
+    // Backend does NOT issue tokens on registration — email verification required first.
+    // Return the response so the caller can show "check your email" message.
+    return data;
   };
 
   const logout = async () => {

@@ -55,7 +55,7 @@ export default function Login() {
       </div>
 
       {/* ── Right panel: form ── */}
-      <div className="flex-1 flex items-center justify-center p-8">
+      <div className="flex-1 flex items-center justify-center px-5 py-8 sm:p-8">
         <div className="w-full max-w-md">
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-gray-900">Sign in</h2>

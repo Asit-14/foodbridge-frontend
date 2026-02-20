@@ -67,10 +67,12 @@
     font-size: 15px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
     @apply bg-surface text-gray-800 font-sans m-0;
+    overflow-x: hidden;
     line-height: 1.6;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   }
@@ -177,4 +179,19 @@
 /* ── Focus ring utility ──────────────────────────── */
 .focus-ring {
   @apply focus:outline-none focus:ring-2 focus:ring-primary-200 focus:ring-offset-1;
+}
+
+/* ── Hide scrollbar for horizontal scroll containers ── */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Responsive images ─────────────────────────────── */
+img, video, svg {
+  max-width: 100%;
+  height: auto;
 }

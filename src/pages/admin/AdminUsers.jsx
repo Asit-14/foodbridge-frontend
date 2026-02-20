@@ -55,8 +55,8 @@ export default function AdminUsers() {
       </div>
 
       {/* Filters */}
-      <div className="flex items-center gap-3 flex-wrap">
-        <div className="flex items-center gap-1 bg-gray-100 rounded-xl p-1">
+      <div className="flex items-center gap-3 overflow-x-auto no-scrollbar pb-1">
+        <div className="flex items-center gap-1 bg-gray-100 rounded-xl p-1 flex-shrink-0">
           {['', 'donor', 'ngo', 'admin'].map((r) => (
             <button
               key={r}
@@ -69,7 +69,7 @@ export default function AdminUsers() {
             </button>
           ))}
         </div>
-        <div className="flex items-center gap-1 bg-gray-100 rounded-xl p-1">
+        <div className="flex items-center gap-1 bg-gray-100 rounded-xl p-1 flex-shrink-0">
           {[
             { val: '', label: 'All' },
             { val: 'true', label: 'Active' },
@@ -86,7 +86,7 @@ export default function AdminUsers() {
             </button>
           ))}
         </div>
-        <span className="text-xs text-gray-400 ml-auto">{total} users total</span>
+        <span className="text-xs text-gray-400 ml-auto flex-shrink-0 whitespace-nowrap">{total} users total</span>
       </div>
 
       {/* User list */}

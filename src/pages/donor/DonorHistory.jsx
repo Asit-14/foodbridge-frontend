@@ -113,7 +113,7 @@ export default function DonorHistory() {
                     {d.quantity} {d.unit || 'servings'} &middot; {d.category?.replace('_', ' ') || 'Food'}
                   </p>
                   <p className="text-xs text-gray-400 truncate mt-1">{d.pickupAddress}</p>
-                  <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 mt-2 text-xs text-gray-500">
                     <span>Created: {formatDateTime(d.createdAt)}</span>
                     {d.expiryTime && <span>Expires: {formatDateTime(d.expiryTime)}</span>}
                   </div>

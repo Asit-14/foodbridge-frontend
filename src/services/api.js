@@ -66,6 +66,11 @@ api.interceptors.response.use(
       }
     }
 
+    if (error.response?.status >= 500) {
+      const { toast } = await import('react-hot-toast');
+      toast.error('Server error. Please try again later.');
+    }
+
     return Promise.reject(error);
   }
 );

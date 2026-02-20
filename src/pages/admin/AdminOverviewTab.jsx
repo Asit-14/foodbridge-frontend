@@ -54,9 +54,9 @@ export default function AdminOverviewTab({ analytics }) {
 
       {/* Daily trend */}
       {dailyTrend?.length > 0 && (
-        <div className="bg-white rounded-2xl border border-gray-100 p-6">
+        <div className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-6">
           <h2 className="text-sm font-semibold text-gray-700 mb-4">7-Day Trend</h2>
-          <div className="grid grid-cols-7 gap-2">
+          <div className="grid grid-cols-7 gap-1 sm:gap-2">
             {dailyTrend.map((day) => {
               const maxVal = Math.max(...dailyTrend.map((d) => d.created)) || 1;
               const height = Math.max(8, (day.created / maxVal) * 100);
@@ -144,7 +144,7 @@ export default function AdminOverviewTab({ analytics }) {
       {/* User counts */}
       <div className="bg-white rounded-2xl border border-gray-100 p-6">
         <h2 className="text-sm font-semibold text-gray-700 mb-4">Platform Users</h2>
-        <div className="grid grid-cols-3 gap-4 text-center">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 text-center">
           {[
             { label: 'Donors', data: users.donors, icon: '🏪' },
             { label: 'NGOs', data: users.ngos, icon: '🤲' },

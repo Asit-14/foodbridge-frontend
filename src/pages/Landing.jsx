@@ -86,36 +86,38 @@ export default function Landing() {
       </header>
 
       {/* ── Impact stats ─────────────────────────── */}
-      <section className="py-16 bg-white">
-        <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          {[
-            { value: 50000, label: 'Meals Saved', suffix: '+', icon: '🍽️' },
-            { value: 200,   label: 'Active NGOs', suffix: '+', icon: '🤝' },
-            { value: 500,   label: 'Donors',      suffix: '+', icon: '🏪' },
-            { value: 15,    label: 'Cities',       suffix: '',  icon: '🌍' },
-          ].map((stat, i) => (
-            <motion.div key={stat.label} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
-              <div className="w-14 h-14 mx-auto rounded-xl bg-primary-50 flex items-center justify-center text-2xl mb-3">
-                {stat.icon}
-              </div>
-              <p className="text-3xl font-bold text-gray-900 tabular-nums">
-                <CountUp end={stat.value} duration={2.5} separator="," enableScrollSpy scrollSpyOnce />{stat.suffix}
-              </p>
-              <p className="text-sm text-gray-600 mt-1">{stat.label}</p>
-            </motion.div>
-          ))}
+      <section className="py-20 lg:py-24 bg-white">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 lg:gap-14 text-center">
+            {[
+              { value: 50000, label: 'Meals Saved', suffix: '+', icon: '🍽️' },
+              { value: 200,   label: 'Active NGOs', suffix: '+', icon: '🤝' },
+              { value: 500,   label: 'Donors',      suffix: '+', icon: '🏪' },
+              { value: 15,    label: 'Cities',       suffix: '',  icon: '🌍' },
+            ].map((stat, i) => (
+              <motion.div key={stat.label} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
+                <div className="w-16 h-16 mx-auto rounded-2xl bg-primary-50 flex items-center justify-center text-3xl mb-4">
+                  {stat.icon}
+                </div>
+                <p className="text-4xl lg:text-5xl font-extrabold text-gray-900 tabular-nums tracking-tight">
+                  <CountUp end={stat.value} duration={2.5} separator="," enableScrollSpy scrollSpyOnce />{stat.suffix}
+                </p>
+                <p className="text-base font-medium text-gray-500 mt-2">{stat.label}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* ── How it works ─────────────────────────── */}
-      <section className="py-20 bg-surface">
+      <section className="py-20 lg:py-28 bg-surface">
         <div className="max-w-6xl mx-auto px-6">
-          <motion.div className="text-center mb-14" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0}>
-            <p className="text-xs font-bold text-primary-600 uppercase tracking-widest mb-2">Simple Process</p>
-            <h2 className="text-3xl font-bold text-gray-900">How It Works</h2>
+          <motion.div className="text-center mb-16" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0}>
+            <p className="text-sm font-bold text-primary-600 uppercase tracking-widest mb-3">Simple Process</p>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900">How It Works</h2>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8 lg:gap-10">
             {[
               { step: '01', title: 'Donate', desc: 'Restaurants and caterers list surplus food with details and pickup window.', icon: '📦', color: 'primary' },
               { step: '02', title: 'Match', desc: 'Our engine finds the nearest, most reliable NGO and notifies them instantly.', icon: '🔗', color: 'amber' },
@@ -128,14 +130,14 @@ export default function Landing() {
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeUp}
-                className="bg-white rounded-xl p-8 border border-gray-200 hover:border-gray-300 transition-colors group"
+                className="bg-white rounded-2xl p-8 lg:p-10 border border-gray-200 hover:border-primary-300 hover:shadow-lg transition-all duration-300 group"
               >
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="text-3xl">{item.icon}</span>
-                  <span className="text-xs font-bold text-primary-500 tracking-wide">STEP {item.step}</span>
+                <div className="flex items-center gap-3 mb-5">
+                  <span className="text-4xl">{item.icon}</span>
+                  <span className="text-xs font-bold text-primary-500 tracking-widest uppercase">Step {item.step}</span>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900">{item.title}</h3>
-                <p className="text-sm text-gray-500 mt-2 leading-relaxed">{item.desc}</p>
+                <h3 className="text-2xl font-bold text-gray-900">{item.title}</h3>
+                <p className="text-base text-gray-500 mt-3 leading-relaxed">{item.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -143,14 +145,14 @@ export default function Landing() {
       </section>
 
       {/* ── Features ─────────────────────────────── */}
-      <section className="py-20 bg-white">
+      <section className="py-20 lg:py-28 bg-white">
         <div className="max-w-6xl mx-auto px-6">
-          <motion.div className="text-center mb-14" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0}>
-            <p className="text-xs font-bold text-primary-600 uppercase tracking-widest mb-2">Platform Features</p>
-            <h2 className="text-3xl font-bold text-gray-900">Built for Real Operations</h2>
+          <motion.div className="text-center mb-16" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0}>
+            <p className="text-sm font-bold text-primary-600 uppercase tracking-widest mb-3">Platform Features</p>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900">Built for Real Operations</h2>
           </motion.div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {[
               { icon: '📍', title: 'Geo-Matching', desc: 'Automatically finds the closest available NGO using live location data.' },
               { icon: '⏱️', title: 'Expiry Tracking', desc: 'Real-time countdown timers ensure food is picked up before it expires.' },
@@ -166,14 +168,14 @@ export default function Landing() {
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeUp}
-                className="flex gap-4 p-5 rounded-xl border border-gray-200 hover:border-gray-300 transition-colors"
+                className="flex gap-5 p-6 rounded-2xl border border-gray-200 hover:border-primary-300 hover:shadow-lg transition-all duration-300"
               >
-                <div className="w-11 h-11 rounded-xl bg-primary-50 flex items-center justify-center text-xl flex-shrink-0">
+                <div className="w-14 h-14 rounded-2xl bg-primary-50 flex items-center justify-center text-2xl flex-shrink-0">
                   {feature.icon}
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-gray-900">{feature.title}</h3>
-                  <p className="text-xs text-gray-500 mt-1 leading-relaxed">{feature.desc}</p>
+                  <h3 className="text-lg font-bold text-gray-900">{feature.title}</h3>
+                  <p className="text-sm text-gray-500 mt-1.5 leading-relaxed">{feature.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -182,10 +184,10 @@ export default function Landing() {
       </section>
 
       {/* ── CTA Banner ───────────────────────────── */}
-      <section className="py-20 bg-primary-600">
+      <section className="py-24 lg:py-32 bg-primary-600">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <motion.h2
-            className="text-3xl font-bold text-white"
+            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
@@ -195,7 +197,7 @@ export default function Landing() {
             Ready to make a difference?
           </motion.h2>
           <motion.p
-            className="mt-4 text-white/80 max-w-lg mx-auto"
+            className="mt-5 text-lg text-white/80 max-w-lg mx-auto leading-relaxed"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
@@ -205,17 +207,17 @@ export default function Landing() {
             Join hundreds of donors and NGOs already using FoodBridge to fight food waste and feed communities.
           </motion.p>
           <motion.div
-            className="mt-8 flex items-center justify-center gap-4 flex-wrap"
+            className="mt-10 flex items-center justify-center gap-4 flex-wrap"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeUp}
             custom={2}
           >
-            <Link to="/register" className="px-8 py-3.5 bg-white text-primary-700 rounded-xl text-sm font-bold hover:bg-gray-50 transition shadow-lg">
+            <Link to="/register" className="px-10 py-4 bg-white text-primary-700 rounded-xl text-base font-bold hover:bg-gray-50 transition shadow-lg">
               Get Started Free
             </Link>
-            <Link to="/login" className="px-8 py-3.5 text-white border border-white/30 rounded-xl text-sm font-semibold hover:bg-white/10 transition">
+            <Link to="/login" className="px-10 py-4 text-white border border-white/30 rounded-xl text-base font-semibold hover:bg-white/10 transition">
               Sign In
             </Link>
           </motion.div>

@@ -88,9 +88,9 @@ export default function Register() {
           },
         }),
       };
-      const user = await register(payload);
-      toast.success(`Welcome, ${user.name}!`);
-      navigate(`/${user.role}`, { replace: true });
+      const result = await register(payload);
+      toast.success(result.message || 'Registration successful! Please check your email to verify your account.');
+      navigate('/login', { replace: true });
     } catch (err) {
       const msg = err.response?.data?.message || 'Registration failed';
       toast.error(msg);
@@ -117,7 +117,7 @@ export default function Register() {
       </div>
 
       {/* ── Right panel: form ── */}
-      <div className="flex-1 flex items-center justify-center p-8">
+      <div className="flex-1 flex items-center justify-center px-5 py-8 sm:p-8">
         <div className="w-full max-w-md">
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-gray-900">Create account</h2>
@@ -177,7 +177,7 @@ export default function Register() {
             </div>
 
             {/* ── Location: State & City ── */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">State</label>
                 <select
@@ -213,7 +213,7 @@ export default function Register() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
                 <input type="password" required value={form.password} onChange={set('password')}

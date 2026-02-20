@@ -40,7 +40,7 @@ export default function ForgotPassword() {
       </div>
 
       {/* Right form panel */}
-      <div className="flex-1 flex items-center justify-center p-8">
+      <div className="flex-1 flex items-center justify-center px-5 py-8 sm:p-8">
         <div className="w-full max-w-md">
           {sent ? (
             /* Success state */

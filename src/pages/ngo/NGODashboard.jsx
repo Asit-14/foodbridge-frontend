@@ -150,19 +150,19 @@ export default function NGODashboard() {
       </div>
 
       {/* Filters & Sort */}
-      <div className="flex items-center gap-2 flex-wrap">
+      <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
         {['all', 'urgent'].map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`px-4 py-1.5 rounded-lg text-sm font-medium capitalize transition ${
+            className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition flex-shrink-0 ${
               filter === f ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
             {f === 'urgent' ? `Urgent (${urgentCount})` : 'All'}
           </button>
         ))}
-        <span className="w-px h-5 bg-gray-200 mx-1" />
+        <span className="w-px h-5 bg-gray-200 mx-1 flex-shrink-0" />
         {[
           { key: 'urgency', label: 'Expiry' },
           { key: 'quantity', label: 'Quantity' },
@@ -171,7 +171,7 @@ export default function NGODashboard() {
           <button
             key={s.key}
             onClick={() => setSortBy(s.key)}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
+            className={`px-3 py-2 rounded-lg text-sm font-medium transition flex-shrink-0 ${
               sortBy === s.key ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >

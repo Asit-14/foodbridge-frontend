@@ -12,13 +12,15 @@ export default function App() {
         <SocketProvider>
           <RouterProvider router={router} />
           <Toaster
-            position="top-right"
+            position="top-center"
+            containerStyle={{ top: 12 }}
             toastOptions={{
               duration: 4000,
               style: {
                 borderRadius: '12px',
                 fontSize: '14px',
                 padding: '12px 16px',
+                maxWidth: '92vw',
               },
             }}
           />
