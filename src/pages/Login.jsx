@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { authService } from '../services/endpoints';
 import { Spinner } from '../components/common/Loader';
 import { INPUT_CLASS } from '../utils/constants';
 import toast from 'react-hot-toast';
@@ -10,19 +11,45 @@ export default function Login() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
+  const [needsVerification, setNeedsVerification] = useState(false);
+  const [resending, setResending] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setNeedsVerification(false);
     try {
       const user = await login(form);
       toast.success(`Welcome back, ${user.name}!`);
       // Route to role-specific dashboard
       navigate(`/${user.role}`, { replace: true });
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Login failed');
+      const status = err.response?.status;
+      const message = err.response?.data?.message || 'Login failed';
+
+      if (status === 403 && message.toLowerCase().includes('verify')) {
+        setNeedsVerification(true);
+      }
+
+      toast.error(message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResendVerification = async () => {
+    if (!form.email) {
+      toast.error('Enter your email address first');
+      return;
+    }
+    setResending(true);
+    try {
+      await authService.resendVerification({ email: form.email });
+      toast.success('Verification email sent! Check your inbox.');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to resend verification email');
+    } finally {
+      setResending(false);
     }
   };
 
@@ -91,6 +118,24 @@ export default function Login() {
                 placeholder="••••••••"
               />
             </div>
+
+            {/* Resend verification banner */}
+            {needsVerification && (
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                <p className="text-sm text-amber-800 font-medium">
+                  Your email is not verified yet. Check your inbox or request a new link.
+                </p>
+                <button
+                  type="button"
+                  onClick={handleResendVerification}
+                  disabled={resending}
+                  className="mt-2 text-sm font-semibold text-primary-600 hover:text-primary-700 hover:underline disabled:opacity-50 flex items-center gap-1"
+                >
+                  {resending && <Spinner className="w-3 h-3" />}
+                  Resend verification email
+                </button>
+              </div>
+            )}
 
             <button
               type="submit"
