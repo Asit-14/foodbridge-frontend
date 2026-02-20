@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { authService } from '../services/endpoints';
 import Button from '../components/common/Button';
+import { INPUT_CLASS } from '../utils/constants';
 import toast from 'react-hot-toast';
 
 export default function ResetPassword() {
@@ -51,7 +52,7 @@ export default function ResetPassword() {
             <div className="text-center">
               <span className="text-5xl block mb-4">✅</span>
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Password updated</h2>
-              <p className="text-sm text-gray-500 mb-8">
+              <p className="text-sm text-gray-600 mb-8">
                 Your password has been successfully reset. You can now sign in with your new password.
               </p>
               <Link to="/login">
@@ -65,7 +66,7 @@ export default function ResetPassword() {
             <>
               <div className="mb-8">
                 <h2 className="text-2xl font-bold text-gray-900">Set new password</h2>
-                <p className="text-gray-500 mt-1">
+                <p className="text-gray-600 mt-1">
                   Choose a strong password for your account.
                 </p>
               </div>
@@ -81,7 +82,7 @@ export default function ResetPassword() {
                     minLength={8}
                     value={form.password}
                     onChange={(e) => setForm({ ...form, password: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition text-sm"
+                    className={INPUT_CLASS}
                     placeholder="••••••••"
                     autoFocus
                   />
@@ -99,7 +100,7 @@ export default function ResetPassword() {
                     required
                     value={form.confirmPassword}
                     onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition text-sm"
+                    className={INPUT_CLASS}
                     placeholder="••••••••"
                   />
                   {form.confirmPassword && !passwordsMatch && (
@@ -119,7 +120,7 @@ export default function ResetPassword() {
                 </Button>
               </form>
 
-              <p className="text-center text-sm text-gray-500 mt-6">
+              <p className="text-center text-sm text-gray-600 mt-6">
                 <Link to="/login" className="text-primary-600 font-semibold hover:underline">
                   Back to Sign in
                 </Link>

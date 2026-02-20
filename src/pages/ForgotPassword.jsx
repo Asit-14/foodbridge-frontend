@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { authService } from '../services/endpoints';
 import Button from '../components/common/Button';
+import { INPUT_CLASS } from '../utils/constants';
 import toast from 'react-hot-toast';
 
 export default function ForgotPassword() {
@@ -46,7 +47,7 @@ export default function ForgotPassword() {
             <div className="text-center">
               <span className="text-5xl block mb-4">📧</span>
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Check your email</h2>
-              <p className="text-sm text-gray-500 mb-6">
+              <p className="text-sm text-gray-600 mb-6">
                 We sent a password reset link to <strong>{email}</strong>.
                 The link expires in 1 hour.
               </p>
@@ -74,7 +75,7 @@ export default function ForgotPassword() {
             <>
               <div className="mb-8">
                 <h2 className="text-2xl font-bold text-gray-900">Forgot password?</h2>
-                <p className="text-gray-500 mt-1">
+                <p className="text-gray-600 mt-1">
                   Enter your email and we'll send you a link to reset your password.
                 </p>
               </div>
@@ -89,7 +90,7 @@ export default function ForgotPassword() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition text-sm"
+                    className={INPUT_CLASS}
                     placeholder="you@example.com"
                     autoFocus
                   />
@@ -106,7 +107,7 @@ export default function ForgotPassword() {
                 </Button>
               </form>
 
-              <p className="text-center text-sm text-gray-500 mt-6">
+              <p className="text-center text-sm text-gray-600 mt-6">
                 Remember your password?{' '}
                 <Link to="/login" className="text-primary-600 font-semibold hover:underline">
                   Sign in

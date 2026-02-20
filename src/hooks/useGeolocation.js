@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
+import { DEFAULT_POSITION } from '../utils/constants';
 
 /**
  * Hook that returns user's current geolocation.
  * Falls back to a default if geolocation is unavailable.
  */
-export function useGeolocation(defaultPos = { lat: 28.6139, lng: 77.209 }) {
+export function useGeolocation(defaultPos = DEFAULT_POSITION) {
   const [position, setPosition] = useState(defaultPos);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);

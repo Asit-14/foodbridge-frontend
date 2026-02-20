@@ -24,7 +24,7 @@ export default function RiskBadge({ donationId, transportKm = 0, compact = false
 
   if (compact) {
     return (
-      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold ${cfg.bg} ${cfg.text}`}>
+      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold ${cfg.bg} ${cfg.text}`}>
         <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
         {cfg.label}
       </span>
@@ -39,10 +39,10 @@ export default function RiskBadge({ donationId, transportKm = 0, compact = false
           {cfg.label} — {risk.riskScore}/100
         </span>
       </div>
-      <p className={`text-[10px] ${cfg.text} opacity-80`}>{risk.recommendation}</p>
+      <p className={`text-xs ${cfg.text} opacity-80`}>{risk.recommendation}</p>
       <div className="mt-2 grid grid-cols-3 gap-1">
         {Object.entries(risk.factors).map(([key, val]) => (
-          <div key={key} className="text-[9px] text-gray-600">
+          <div key={key} className="text-xs text-gray-600">
             <span className="font-medium capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}:</span>{' '}
             <span>{val}</span>
           </div>

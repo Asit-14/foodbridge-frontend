@@ -2,9 +2,19 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import StatusBadge from '../common/StatusBadge';
 import CountdownTimer from '../common/CountdownTimer';
-import { MARKER_COLORS } from '../../utils/constants';
+import { MARKER_COLORS, DEFAULT_MAP_CENTER } from '../../utils/constants';
 
-// ── Custom colored marker factory ──────────────────
+// ── Navigation Helper ──────────────────────────────
+const handleNavigation = (lat, lng) => {
+  // Checks if the user is on an iOS device to use Apple Maps, otherwise Google Maps
+  const isApple = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const url = isApple 
+    ? `maps://maps.apple.com/?daddr=${lat},${lng}&dirflg=d`
+    : `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+  
+  window.open(url, '_blank');
+};
+
 function createIcon(color) {
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 36" width="28" height="42">
@@ -20,7 +30,6 @@ function createIcon(color) {
   });
 }
 
-// ── Map auto-fit helper ────────────────────────────
 function FitBounds({ donations }) {
   const map = useMap();
   if (donations.length > 0) {
@@ -33,13 +42,9 @@ function FitBounds({ donations }) {
   return null;
 }
 
-/**
- * Main donation map component.
- * Renders markers colored by donation status with info popups.
- */
 export default function DonationMap({
   donations = [],
-  center = [28.6139, 77.209],
+  center = DEFAULT_MAP_CENTER,
   zoom = 12,
   height = '400px',
   onMarkerClick,
@@ -81,9 +86,23 @@ export default function DonationMap({
                   {donation.quantity} {donation.unit || 'servings'}
                 </p>
                 <p className="text-xs text-gray-500 mb-2">{donation.pickupAddress}</p>
+                
                 {donation.status === 'Available' && (
-                  <CountdownTimer expiryTime={donation.expiryTime} />
+                  <div className="mb-3">
+                    <CountdownTimer expiryTime={donation.expiryTime} />
+                  </div>
                 )}
+
+                {/* ── Premium Navigation Button ── */}
+                <button
+                  onClick={() => handleNavigation(lat, lng)}
+                  className="w-full mt-2 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold py-2 px-3 rounded-lg transition-colors shadow-sm"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="3 11 22 2 13 21 11 13 3 11" />
+                  </svg>
+                  Navigate Now
+                </button>
               </div>
             </Popup>
           </Marker>

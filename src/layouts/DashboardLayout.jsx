@@ -10,10 +10,9 @@ export default function DashboardLayout() {
     <div className="min-h-screen bg-surface">
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      {/* Main area — offset on desktop to make room for sidebar */}
       <div className="lg:pl-60">
         <Navbar onMenuToggle={() => setSidebarOpen(true)} />
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <Outlet />
         </main>
       </div>

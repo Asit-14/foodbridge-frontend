@@ -26,9 +26,11 @@ export const donationService = {
 };
 
 export const adminService = {
-  getAnalytics:    () => api.get('/admin/analytics'),
-  getUsers:        (params) => api.get('/admin/users', { params }),
-  updateUserStatus:(id, data) => api.put(`/admin/users/${id}/status`, data),
+  getAnalytics:       () => api.get('/admin/analytics'),
+  getCityAnalytics:   (params) => api.get('/admin/analytics/city', { params }),
+  getCityLeaderboard: () => api.get('/admin/analytics/city-leaderboard'),
+  getUsers:           (params) => api.get('/admin/users', { params }),
+  updateUserStatus:   (id, data) => api.put(`/admin/users/${id}/status`, data),
 };
 
 export const analyticsService = {
@@ -43,4 +45,15 @@ export const notificationService = {
   markRead:     (id) => api.put(`/notifications/${id}/read`),
   markAllRead:  () => api.put('/notifications/read-all'),
   getUnreadCount:() => api.get('/notifications/unread-count'),
+};
+
+export const locationService = {
+  getCountries:  () => api.get('/location/countries'),
+  getStates:     (country = 'IN') => api.get('/location/states', { params: { country } }),
+  getCities:     (state) => api.get('/location/cities', { params: { state } }),
+  validate:      (data) => api.post('/location/validate', data),
+};
+
+export const configService = {
+  getClientConfig: () => api.get('/config/client-config'),
 };

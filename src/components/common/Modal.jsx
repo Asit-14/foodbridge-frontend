@@ -21,7 +21,7 @@ export default function Modal({ open, onClose, title, children, maxWidth = 'max-
       onClick={(e) => e.target === overlayRef.current && onClose()}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4"
     >
-      <div className={`bg-white rounded-2xl shadow-2xl w-full ${maxWidth} animate-fade-in-up`}>
+      <div className={`bg-white rounded-xl shadow-2xl w-full ${maxWidth} animate-fade-in-up`}>
         {title && (
           <div className="flex items-center justify-between px-6 pt-5 pb-0">
             <h3 className="text-lg font-bold text-gray-900">{title}</h3>

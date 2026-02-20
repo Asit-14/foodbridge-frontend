@@ -10,6 +10,7 @@ import {
   HiOutlineUsers,
   HiOutlineBell,
   HiOutlineUser,
+  HiOutlineLogout,
 } from 'react-icons/hi';
 
 const SIDEBAR_NAV = {
@@ -36,7 +37,7 @@ const SHARED_NAV = (basePath) => [
 ];
 
 export default function Sidebar({ open, onClose }) {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const location = useLocation();
 
   const role = user?.role || 'donor';
@@ -47,7 +48,7 @@ export default function Sidebar({ open, onClose }) {
   const isActive = (to) => location.pathname === to;
 
   const linkClasses = (to) =>
-    `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors duration-150 ${
+    `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-150 ${
       isActive(to)
         ? 'bg-primary-50 text-primary-700'
         : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
@@ -63,7 +64,7 @@ export default function Sidebar({ open, onClose }) {
 
       {/* Main nav */}
       <nav className="space-y-1">
-        <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+        <p className="px-3 mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
           Menu
         </p>
         {mainLinks.map((link) => (
@@ -75,6 +76,9 @@ export default function Sidebar({ open, onClose }) {
           >
             <link.icon size={18} />
             {link.label}
+            {isActive(link.to) && (
+              <span className="ml-auto w-1.5 h-1.5 rounded-full bg-primary-500" />
+            )}
           </Link>
         ))}
       </nav>
@@ -83,7 +87,7 @@ export default function Sidebar({ open, onClose }) {
 
       {/* Shared nav */}
       <nav className="space-y-1">
-        <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+        <p className="px-3 mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
           Account
         </p>
         {sharedLinks.map((link) => (
@@ -95,13 +99,16 @@ export default function Sidebar({ open, onClose }) {
           >
             <link.icon size={18} />
             {link.label}
+            {isActive(link.to) && (
+              <span className="ml-auto w-1.5 h-1.5 rounded-full bg-primary-500" />
+            )}
           </Link>
         ))}
       </nav>
 
-      {/* Role badge at bottom */}
-      <div className="mt-auto pt-6">
-        <div className="bg-gray-50 rounded-xl p-3">
+      {/* User card + logout at bottom */}
+      <div className="mt-auto pt-6 space-y-2">
+        <div className="bg-gray-50 rounded-lg p-3">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center text-sm font-bold flex-shrink-0">
               {user?.name?.charAt(0).toUpperCase()}
@@ -112,6 +119,14 @@ export default function Sidebar({ open, onClose }) {
             </div>
           </div>
         </div>
+
+        <button
+          onClick={logout}
+          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-gray-500 hover:bg-rose-50 hover:text-rose-600 transition-colors duration-150"
+        >
+          <HiOutlineLogout size={18} />
+          Sign Out
+        </button>
       </div>
     </>
   );
@@ -119,15 +134,15 @@ export default function Sidebar({ open, onClose }) {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex lg:flex-col lg:w-60 lg:fixed lg:inset-y-0 bg-white border-r border-gray-100 px-4 py-6 z-30">
+      <aside className="hidden lg:flex lg:flex-col lg:w-60 lg:fixed lg:inset-y-0 bg-white border-r border-gray-200 px-4 py-6 z-30">
         {navContent}
       </aside>
 
       {/* Mobile overlay */}
       {open && (
         <div className="fixed inset-0 z-40 lg:hidden">
-          <div className="fixed inset-0 bg-black/30" onClick={onClose} />
-          <aside className="fixed inset-y-0 left-0 w-64 bg-white px-4 py-6 flex flex-col shadow-xl animate-fade-in-up z-50">
+          <div className="fixed inset-0 bg-black/30 backdrop-blur-sm" onClick={onClose} />
+          <aside className="fixed inset-y-0 left-0 w-64 bg-white px-4 py-6 flex flex-col shadow-xl animate-slide-in-left z-50">
             {navContent}
           </aside>
         </div>

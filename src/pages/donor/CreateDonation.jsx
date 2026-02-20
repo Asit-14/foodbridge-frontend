@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { donationService } from '../../services/endpoints';
+import { INPUT_CLASS, SELECT_CLASS } from '../../utils/constants';
 import { useGeolocation } from '../../hooks/useGeolocation';
 import { Spinner } from '../../components/common/Loader';
 import toast from 'react-hot-toast';
@@ -107,7 +108,7 @@ export default function CreateDonation() {
     }
   };
 
-  const inputClass = 'w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition text-sm';
+  const inputClass = INPUT_CLASS;
 
   return (
     <div className="max-w-2xl mx-auto animate-fade-in-up">

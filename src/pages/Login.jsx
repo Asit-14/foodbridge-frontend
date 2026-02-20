@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Spinner } from '../components/common/Loader';
+import { INPUT_CLASS } from '../utils/constants';
 import toast from 'react-hot-toast';
 
 export default function Login() {
@@ -58,7 +59,7 @@ export default function Login() {
         <div className="w-full max-w-md">
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-gray-900">Sign in</h2>
-            <p className="text-gray-500 mt-1">Enter your credentials to continue</p>
+            <p className="text-gray-600 mt-1">Enter your credentials to continue</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -69,7 +70,7 @@ export default function Login() {
                 required
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition text-sm"
+                className={INPUT_CLASS}
                 placeholder="you@example.com"
               />
             </div>
@@ -86,7 +87,7 @@ export default function Login() {
                 required
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition text-sm"
+                className={INPUT_CLASS}
                 placeholder="••••••••"
               />
             </div>
@@ -94,14 +95,14 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-semibold text-sm transition disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-semibold text-sm transition disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {loading && <Spinner className="w-4 h-4" />}
               Sign In
             </button>
           </form>
 
-          <p className="text-center text-sm text-gray-500 mt-6">
+          <p className="text-center text-sm text-gray-600 mt-6">
             Don&apos;t have an account?{' '}
             <Link to="/register" className="text-primary-600 font-semibold hover:underline">
               Sign up

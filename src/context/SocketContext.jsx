@@ -18,10 +18,25 @@ export function SocketProvider({ children }) {
     const socket = io(SOCKET_URL, {
       auth: { token },
       transports: ['websocket', 'polling'],
+      reconnectionAttempts: 10,
+      reconnectionDelayMax: 30000,
     });
 
     socket.on('connect', () => setConnected(true));
     socket.on('disconnect', () => setConnected(false));
+
+    // ── Reconnection feedback ──────────────────────
+    socket.io.on('reconnect_attempt', (attempt) => {
+      if (attempt >= 3) {
+        toast('Reconnecting to server...', { icon: '🔄', duration: 3000 });
+      }
+    });
+    socket.io.on('reconnect', () => {
+      toast.success('Reconnected to server', { duration: 3000 });
+    });
+    socket.io.on('reconnect_failed', () => {
+      toast.error('Unable to reconnect. Please refresh the page.', { duration: 8000 });
+    });
 
     // ── Global real-time event handlers ──────────
     socket.on('notification', (data) => {

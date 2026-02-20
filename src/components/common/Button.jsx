@@ -18,11 +18,11 @@ const variants = {
 };
 
 const sizes = {
-  xs: 'px-2.5 py-1 text-xs rounded-lg',
-  sm: 'px-3 py-1.5 text-xs rounded-lg',
-  md: 'px-4 py-2 text-sm rounded-xl',
-  lg: 'px-5 py-2.5 text-sm rounded-xl',
-  xl: 'px-6 py-3 text-sm rounded-xl',
+  xs: 'px-2.5 py-1.5 text-xs rounded-lg',
+  sm: 'px-3.5 py-2 text-sm rounded-lg',
+  md: 'px-4 py-2.5 text-sm rounded-lg',
+  lg: 'px-5 py-2.5 text-sm rounded-lg',
+  xl: 'px-6 py-3 text-base rounded-lg',
 };
 
 export default function Button({

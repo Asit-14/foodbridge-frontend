@@ -1,4 +1,7 @@
+import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
+import { PageLoader } from '../components/common/Loader';
+import ErrorBoundary from '../components/common/ErrorBoundary';
 
 import Landing from '../pages/Landing';
 import Login from '../pages/Login';
@@ -8,16 +11,16 @@ import ResetPassword from '../pages/ResetPassword';
 import DashboardLayout from '../layouts/DashboardLayout';
 import ProtectedRoute from '../components/common/ProtectedRoute';
 
-// ── Lazy-ish imports (kept sync for hackathon simplicity) ──
-import DonorDashboard from '../pages/donor/DonorDashboard';
-import CreateDonation from '../pages/donor/CreateDonation';
-import DonorHistory from '../pages/donor/DonorHistory';
-import NGODashboard from '../pages/ngo/NGODashboard';
-import NGOPickups from '../pages/ngo/NGOPickups';
-import AdminDashboard from '../pages/admin/AdminDashboard';
-import AdminUsers from '../pages/admin/AdminUsers';
-import NotificationsPage from '../pages/shared/NotificationsPage';
-import ProfilePage from '../pages/shared/ProfilePage';
+// ── Lazy-loaded dashboard pages ──
+const DonorDashboard = lazy(() => import('../pages/donor/DonorDashboard'));
+const CreateDonation = lazy(() => import('../pages/donor/CreateDonation'));
+const DonorHistory = lazy(() => import('../pages/donor/DonorHistory'));
+const NGODashboard = lazy(() => import('../pages/ngo/NGODashboard'));
+const NGOPickups = lazy(() => import('../pages/ngo/NGOPickups'));
+const AdminDashboard = lazy(() => import('../pages/admin/AdminDashboard'));
+const AdminUsers = lazy(() => import('../pages/admin/AdminUsers'));
+const NotificationsPage = lazy(() => import('../pages/shared/NotificationsPage'));
+const ProfilePage = lazy(() => import('../pages/shared/ProfilePage'));
 
 const router = createBrowserRouter([
   // ── Public routes ───────────────────────────
@@ -31,7 +34,11 @@ const router = createBrowserRouter([
   {
     element: (
       <ProtectedRoute roles={['donor']}>
-        <DashboardLayout />
+        <ErrorBoundary>
+          <Suspense fallback={<PageLoader />}>
+            <DashboardLayout />
+          </Suspense>
+        </ErrorBoundary>
       </ProtectedRoute>
     ),
     children: [
@@ -47,7 +54,11 @@ const router = createBrowserRouter([
   {
     element: (
       <ProtectedRoute roles={['ngo']}>
-        <DashboardLayout />
+        <ErrorBoundary>
+          <Suspense fallback={<PageLoader />}>
+            <DashboardLayout />
+          </Suspense>
+        </ErrorBoundary>
       </ProtectedRoute>
     ),
     children: [
@@ -63,7 +74,11 @@ const router = createBrowserRouter([
   {
     element: (
       <ProtectedRoute roles={['admin']}>
-        <DashboardLayout />
+        <ErrorBoundary>
+          <Suspense fallback={<PageLoader />}>
+            <DashboardLayout />
+          </Suspense>
+        </ErrorBoundary>
       </ProtectedRoute>
     ),
     children: [

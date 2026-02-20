@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { donationService } from '../../services/endpoints';
 import { useSocket } from '../../context/SocketContext';
@@ -10,8 +10,10 @@ import DonationMap from '../../components/maps/DonationMap';
 import EmptyState from '../../components/common/EmptyState';
 import ConfirmModal from '../../components/common/ConfirmModal';
 import Button from '../../components/common/Button';
+import LiveTimeline from '../../components/common/LiveTimeline';
+import NGOProfilePanel from '../../components/common/NGOProfilePanel';
 import { CardSkeleton } from '../../components/common/Loader';
-import { timeAgo } from '../../utils/constants';
+import { timeAgo, CATEGORY_MAP } from '../../utils/constants';
 import RiskBadge from '../../components/common/RiskBadge';
 import toast from 'react-hot-toast';
 
@@ -20,6 +22,7 @@ export default function DonorDashboard() {
   const [loading, setLoading] = useState(true);
   const [cancelTarget, setCancelTarget] = useState(null);
   const [cancelling, setCancelling] = useState(false);
+  const [expandedCard, setExpandedCard] = useState(null);
   const { socket } = useSocket();
 
   const fetchDonations = useCallback(async () => {
@@ -64,48 +67,68 @@ export default function DonorDashboard() {
   };
 
   // Computed stats
-  const stats = {
+  const stats = useMemo(() => ({
     total: donations.length,
     active: donations.filter((d) => ['Available', 'Accepted', 'PickedUp'].includes(d.status)).length,
     delivered: donations.filter((d) => d.status === 'Delivered').length,
     totalQuantity: donations.filter((d) => d.status === 'Delivered').reduce((sum, d) => sum + d.quantity, 0),
-  };
+  }), [donations]);
 
-  const activeDonations = donations.filter((d) => d.status !== 'Delivered' && d.status !== 'Expired' && d.status !== 'Cancelled');
-  const mapDonations = donations.filter((d) => d.location?.coordinates);
+  const successRate = useMemo(() =>
+    stats.total > 0 ? Math.round((stats.delivered / stats.total) * 100) : 0,
+  [stats]);
+
+  const activeDonations = useMemo(() => donations.filter(
+    (d) => d.status !== 'Delivered' && d.status !== 'Expired' && d.status !== 'Cancelled'
+  ), [donations]);
+
+  const mapDonations = useMemo(() =>
+    donations.filter((d) => d.location?.coordinates),
+  [donations]);
 
   return (
     <div className="space-y-6 animate-fade-in-up">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+      {/* ── Header ── */}
+      <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Donor Dashboard</h1>
-          <p className="text-sm text-gray-500 mt-1">Track your food donations and impact</p>
+          <p className="text-sm text-gray-600 mt-0.5">Track your food donations and impact</p>
         </div>
         <Link to="/donor/create">
           <Button variant="primary" size="lg">+ New Donation</Button>
         </Link>
       </div>
 
-      {/* Stats */}
+      {/* ── KPI Stats ── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard icon="📦" label="Total Donations" value={stats.total} color="primary" />
         <StatCard icon="🔄" label="Active Now" value={stats.active} color="amber" />
-        <StatCard icon="✅" label="Delivered" value={stats.delivered} color="emerald" />
-        <StatCard icon="🍽️" label="Servings Saved" value={stats.totalQuantity} color="rose" />
+        <StatCard icon="✅" label="Delivered" value={stats.delivered} color="emerald" trend={successRate > 0 ? `${successRate}%` : undefined} trendDirection="up" />
+        <StatCard icon="🍽" label="Servings Saved" value={stats.totalQuantity} color="rose" />
       </div>
 
-      {/* Map */}
+      {/* ── Map ── */}
       {mapDonations.length > 0 && (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-          <h2 className="text-sm font-semibold text-gray-700 mb-3">Your Donations Map</h2>
-          <DonationMap donations={mapDonations} height="300px" />
+        <div className="bg-white rounded-xl border border-gray-200 p-4">
+          <h2 className="text-base font-semibold text-gray-800 mb-3">Your Donations Map</h2>
+          <DonationMap donations={mapDonations} height="280px" />
         </div>
       )}
 
-      {/* Active donations list */}
+      {/* ── Active Donations ── */}
       <div>
-        <h2 className="text-lg font-bold text-gray-900 mb-4">Active Donations</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-base font-bold text-gray-900">
+            Active Donations
+            {stats.active > 0 && (
+              <span className="ml-2 text-xs font-medium text-gray-400">({stats.active})</span>
+            )}
+          </h2>
+          <Link to="/donor/history" className="text-xs font-semibold text-primary-600 hover:text-primary-700 transition">
+            View all history
+          </Link>
+        </div>
+
         {loading ? (
           <CardSkeleton count={3} />
         ) : activeDonations.length === 0 ? (
@@ -117,51 +140,98 @@ export default function DonorDashboard() {
             actionTo="/donor/create"
           />
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {activeDonations.map((d) => (
-              <div key={d._id} className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <h3 className="font-bold text-gray-900">{d.foodType}</h3>
-                    <p className="text-xs text-gray-500">
-                      {d.quantity} {d.unit || 'servings'} &middot; {timeAgo(d.createdAt)}
-                    </p>
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {activeDonations.map((d) => {
+              const isExpanded = expandedCard === d._id;
+              const category = CATEGORY_MAP[d.category];
+
+              return (
+                <div
+                  key={d._id}
+                  className="bg-white rounded-xl border border-gray-200 hover:border-gray-300 transition-colors overflow-hidden stagger-item"
+                >
+                  {/* Card header */}
+                  <div className="p-5 pb-3">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2 min-w-0">
+                        {category && <span className="text-lg">{category.icon}</span>}
+                        <div className="min-w-0">
+                          <h3 className="font-bold text-gray-900 truncate">{d.foodType}</h3>
+                          <p className="text-xs text-gray-500">
+                            {d.quantity} {d.unit || 'servings'} &middot; {timeAgo(d.createdAt)}
+                          </p>
+                        </div>
+                      </div>
+                      <StatusBadge status={d.status} />
+                    </div>
+
+                    <p className="text-xs text-gray-500 truncate mb-3">{d.pickupAddress}</p>
+                    {d.city && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 text-xs font-medium">
+                        {d.city}{d.state ? `, ${d.state}` : ''}
+                      </span>
+                    )}
+
+                    {/* Countdown + Risk for available donations */}
+                    {d.status === 'Available' && (
+                      <div className="flex items-center gap-2 mb-3">
+                        <CountdownTimer expiryTime={d.expiryTime} />
+                        <RiskBadge donationId={d._id} compact />
+                      </div>
+                    )}
+
+                    {/* NGO Profile Panel (shown after acceptance) */}
+                    {d.acceptedBy && typeof d.acceptedBy === 'object' && (
+                      <div className="mb-3">
+                        <NGOProfilePanel ngo={d.acceptedBy} donation={d} />
+                      </div>
+                    )}
+                    {d.acceptedBy && typeof d.acceptedBy === 'string' && (
+                      <p className="text-xs text-emerald-600 font-medium mb-3">
+                        Accepted by NGO partner
+                      </p>
+                    )}
+
+                    {/* Progress tracker */}
+                    <ProgressTracker currentStatus={d.status} />
                   </div>
-                  <StatusBadge status={d.status} />
-                </div>
 
-                <p className="text-xs text-gray-500 mb-3 truncate">{d.pickupAddress}</p>
+                  {/* Expandable Operations Panel */}
+                  <div className="border-t border-gray-200">
+                    <button
+                      onClick={() => setExpandedCard(isExpanded ? null : d._id)}
+                      className="w-full px-5 py-2.5 flex items-center justify-between text-xs font-medium text-gray-500 hover:bg-gray-50 transition-colors"
+                    >
+                      <span>{isExpanded ? 'Hide details' : 'View operations log'}</span>
+                      <svg
+                        className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
 
-                {d.status === 'Available' && <CountdownTimer expiryTime={d.expiryTime} />}
-                {d.status === 'Available' && (
-                  <div className="mt-2">
-                    <RiskBadge donationId={d._id} compact />
+                    {isExpanded && (
+                      <div className="px-5 pb-5 animate-fade-in">
+                        <LiveTimeline donation={d} compact />
+
+                        {d.status === 'Available' && (
+                          <Button
+                            variant="danger"
+                            size="sm"
+                            fullWidth
+                            className="mt-4"
+                            onClick={() => setCancelTarget(d._id)}
+                          >
+                            Cancel Donation
+                          </Button>
+                        )}
+                      </div>
+                    )}
                   </div>
-                )}
-
-                {d.status === 'Available' && (
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    fullWidth
-                    className="mt-3"
-                    onClick={() => setCancelTarget(d._id)}
-                  >
-                    Cancel Donation
-                  </Button>
-                )}
-
-                <div className="mt-4">
-                  <ProgressTracker currentStatus={d.status} />
                 </div>
-
-                {d.acceptedBy && (
-                  <p className="text-xs text-emerald-600 mt-3 font-medium">
-                    Accepted by: {d.acceptedBy.name || d.acceptedBy.organizationName || 'NGO'}
-                  </p>
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

@@ -14,7 +14,7 @@ export default function ConfirmModal({
 }) {
   return (
     <Modal open={open} onClose={onClose} title={title}>
-      <p className="text-sm text-gray-500 mb-6">{message}</p>
+      <p className="text-sm text-gray-600 mb-6 leading-relaxed">{message}</p>
       <div className="flex items-center gap-3">
         <Button variant="secondary" size="md" fullWidth onClick={onClose}>
           {cancelLabel}

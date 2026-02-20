@@ -1,3 +1,12 @@
+// ── Shared form CSS classes ──────────────────────
+export const INPUT_CLASS = 'w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition text-sm';
+export const SELECT_CLASS = `${INPUT_CLASS} appearance-none bg-white`;
+
+// ── Geographic defaults ─────────────────────────
+export const DEFAULT_POSITION = { lat: 28.6139, lng: 77.209 };
+export const DEFAULT_MAP_CENTER = [28.6139, 77.209];
+export const DEFAULT_SEARCH_RADIUS_KM = 5;
+
 // ── Status configuration map ───────────────────────
 export const STATUS_CONFIG = {
   Available: { color: 'bg-blue-100 text-blue-800', dot: 'bg-blue-500', label: 'Available' },

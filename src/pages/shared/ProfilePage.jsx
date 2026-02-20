@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { authService } from '../../services/endpoints';
-import { getReliabilityBadge, formatDateTime } from '../../utils/constants';
+import { getReliabilityBadge, formatDateTime, INPUT_CLASS } from '../../utils/constants';
 import toast from 'react-hot-toast';
 
 export default function ProfilePage() {
@@ -109,7 +109,7 @@ export default function ProfilePage() {
                 name="name"
                 value={form.name}
                 onChange={handleChange}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none text-sm"
+                className={INPUT_CLASS}
               />
             ) : (
               <p className="text-sm text-gray-900 font-medium">{user.name}</p>
@@ -128,7 +128,7 @@ export default function ProfilePage() {
                 name="phone"
                 value={form.phone}
                 onChange={handleChange}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none text-sm"
+                className={INPUT_CLASS}
               />
             ) : (
               <p className="text-sm text-gray-900 font-medium">{user.phone || 'Not set'}</p>
@@ -143,7 +143,7 @@ export default function ProfilePage() {
                   name="organizationName"
                   value={form.organizationName}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none text-sm"
+                  className={INPUT_CLASS}
                 />
               ) : (
                 <p className="text-sm text-gray-900 font-medium">{user.organizationName || 'Not set'}</p>
@@ -158,7 +158,7 @@ export default function ProfilePage() {
                 name="address"
                 value={form.address}
                 onChange={handleChange}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none text-sm"
+                className={INPUT_CLASS}
               />
             ) : (
               <p className="text-sm text-gray-900 font-medium">{user.address || 'Not set'}</p>

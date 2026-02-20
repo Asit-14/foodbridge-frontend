@@ -14,14 +14,12 @@ export default function Navbar({ onMenuToggle }) {
 
   const basePath = `/${user?.role}`;
 
-  // Fetch unread count on mount
   useEffect(() => {
     notificationService.getUnreadCount()
       .then(({ data }) => setUnreadCount(data.data?.count || 0))
       .catch(() => {});
   }, []);
 
-  // Live: increment unread count on new notification
   useEffect(() => {
     if (!socket) return;
     const handler = () => setUnreadCount((c) => c + 1);
@@ -29,7 +27,6 @@ export default function Navbar({ onMenuToggle }) {
     return () => socket.off('notification', handler);
   }, [socket]);
 
-  // Reset count when visiting notifications page
   useEffect(() => {
     if (location.pathname.endsWith('/notifications')) {
       setUnreadCount(0);
@@ -41,7 +38,6 @@ export default function Navbar({ onMenuToggle }) {
     navigate('/login');
   };
 
-  // Derive page title from current route
   const getPageTitle = () => {
     const path = location.pathname;
     if (path.endsWith('/create')) return 'New Donation';
@@ -56,7 +52,7 @@ export default function Navbar({ onMenuToggle }) {
   };
 
   return (
-    <nav className="bg-white border-b border-gray-100 sticky top-0 z-20">
+    <nav className="bg-white border-b border-gray-200 sticky top-0 z-20">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
           {/* Left: mobile menu + page title */}
@@ -72,13 +68,11 @@ export default function Navbar({ onMenuToggle }) {
 
           {/* Right: actions */}
           <div className="flex items-center gap-2">
-            {/* Connection indicator */}
             <span
               className={`w-2 h-2 rounded-full ${connected ? 'bg-emerald-500' : 'bg-gray-300'}`}
               title={connected ? 'Real-time connected' : 'Disconnected'}
             />
 
-            {/* Notifications bell */}
             <Link
               to={`${basePath}/notifications`}
               className="relative p-2 rounded-lg hover:bg-gray-50 text-gray-500"
@@ -86,24 +80,22 @@ export default function Navbar({ onMenuToggle }) {
             >
               <HiOutlineBell size={18} />
               {unreadCount > 0 && (
-                <span className="absolute top-0.5 right-0.5 w-4 h-4 bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+                <span className="absolute top-0.5 right-0.5 w-4 h-4 bg-rose-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
                   {unreadCount > 9 ? '9+' : unreadCount}
                 </span>
               )}
             </Link>
 
-            {/* User pill */}
             <Link
               to={`${basePath}/profile`}
-              className="hidden sm:flex items-center gap-2 ml-1 pl-3 border-l border-gray-100 hover:opacity-80 transition"
+              className="hidden sm:flex items-center gap-2 ml-1 pl-3 border-l border-gray-200 hover:opacity-80 transition"
             >
               <div className="w-7 h-7 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center text-xs font-bold">
                 {user?.name?.charAt(0).toUpperCase()}
               </div>
-              <span className="text-xs font-medium text-gray-700">{user?.name}</span>
+              <span className="text-sm font-medium text-gray-700">{user?.name}</span>
             </Link>
 
-            {/* Logout */}
             <button
               onClick={handleLogout}
               className="p-2 rounded-lg hover:bg-rose-50 text-gray-400 hover:text-rose-600 transition-colors"
