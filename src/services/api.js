@@ -5,11 +5,10 @@ const API_BASE = import.meta.env.VITE_API_URL || '/api/v1';
 const api = axios.create({
   baseURL: API_BASE,
   headers: { 'Content-Type': 'application/json' },
-  withCredentials: true,
   timeout: 15000,
 });
 
-// ── Request interceptor: inject access token ───────
+// ── Request interceptor: attach token ────────────────
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('accessToken');
   if (token) {
@@ -18,57 +17,26 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// ── Response interceptor: auto-refresh on 401 ──────
-let isRefreshing = false;
-let failedQueue = [];
-
-function processQueue(error, token = null) {
-  failedQueue.forEach(({ resolve, reject }) => {
-    if (error) reject(error);
-    else resolve(token);
-  });
-  failedQueue = [];
-}
-
+// ── Response interceptor: RFC 7807 error handling ─────
 api.interceptors.response.use(
   (res) => res,
   async (error) => {
-    const originalRequest = error.config;
+    const status = error.response?.status;
+    const data = error.response?.data;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      if (isRefreshing) {
-        return new Promise((resolve, reject) => {
-          failedQueue.push({ resolve, reject });
-        }).then((token) => {
-          originalRequest.headers.Authorization = `Bearer ${token}`;
-          return api(originalRequest);
-        });
-      }
-
-      originalRequest._retry = true;
-      isRefreshing = true;
-
-      try {
-        const { data } = await axios.post(`${API_BASE}/auth/refresh-token`, {}, { withCredentials: true });
-        const newToken = data.accessToken;
-        localStorage.setItem('accessToken', newToken);
-        api.defaults.headers.common.Authorization = `Bearer ${newToken}`;
-        processQueue(null, newToken);
-        originalRequest.headers.Authorization = `Bearer ${newToken}`;
-        return api(originalRequest);
-      } catch (err) {
-        processQueue(err, null);
-        localStorage.removeItem('accessToken');
-        window.location.href = '/login';
-        return Promise.reject(err);
-      } finally {
-        isRefreshing = false;
-      }
+    // Normalise: RFC 7807 uses "detail", legacy used "message"
+    if (data && data.detail && !data.message) {
+      data.message = data.detail;
     }
 
-    if (error.response?.status >= 500) {
+    if (status === 401) {
+      localStorage.removeItem('accessToken');
+      window.location.href = '/login';
+    }
+
+    if (status >= 500) {
       const { toast } = await import('react-hot-toast');
-      toast.error('Server error. Please try again later.');
+      toast.error(data?.detail || 'Server error. Please try again later.');
     }
 
     return Promise.reject(error);

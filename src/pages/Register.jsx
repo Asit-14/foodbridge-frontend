@@ -80,7 +80,6 @@ export default function Register() {
         city: selectedCity?.name || '',
         country: 'India',
         regionCode: selectedState?.regionCode || '',
-        // Include coordinates if city selected
         ...(selectedCity && {
           location: {
             type: 'Point',
@@ -88,12 +87,18 @@ export default function Register() {
           },
         }),
       };
-      const result = await register(payload);
-      toast.success(result.message || 'Registration successful! Please check your email to verify your account.');
-      navigate('/login', { replace: true });
+      const user = await register(payload);
+      toast.success(`Welcome, ${user.name}!`);
+      navigate(`/${user.role}`, { replace: true });
     } catch (err) {
+      const status = err.response?.status;
       const msg = err.response?.data?.message || 'Registration failed';
-      toast.error(msg);
+
+      if (status === 409) {
+        toast.error('An account with this email already exists.');
+      } else {
+        toast.error(msg);
+      }
     } finally {
       setLoading(false);
     }

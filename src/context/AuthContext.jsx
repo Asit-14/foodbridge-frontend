@@ -28,7 +28,7 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  // On mount: try to load user from token
+  // On mount: if token exists, fetch current user
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
@@ -44,19 +44,18 @@ export function AuthProvider({ children }) {
       });
   }, []);
 
-  // ── Auth actions exposed to consumers ──
   const login = async (credentials) => {
     const { data } = await authService.login(credentials);
-    localStorage.setItem('accessToken', data.accessToken);
-    dispatch({ type: 'AUTH_LOADED', payload: data.data.user });
-    return data.data.user;
+    localStorage.setItem('accessToken', data.token);
+    dispatch({ type: 'AUTH_LOADED', payload: data.user });
+    return data.user;
   };
 
   const register = async (formData) => {
     const { data } = await authService.register(formData);
-    // Backend does NOT issue tokens on registration — email verification required first.
-    // Return the response so the caller can show "check your email" message.
-    return data;
+    localStorage.setItem('accessToken', data.token);
+    dispatch({ type: 'AUTH_LOADED', payload: data.user });
+    return data.user;
   };
 
   const logout = async () => {

@@ -6,9 +6,6 @@ import ErrorBoundary from '../components/common/ErrorBoundary';
 import Landing from '../pages/Landing';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
-import ForgotPassword from '../pages/ForgotPassword';
-import ResetPassword from '../pages/ResetPassword';
-import VerifyEmail from '../pages/VerifyEmail';
 import DashboardLayout from '../layouts/DashboardLayout';
 import ProtectedRoute from '../components/common/ProtectedRoute';
 
@@ -28,9 +25,6 @@ const router = createBrowserRouter([
   { path: '/', element: <Landing /> },
   { path: '/login', element: <Login /> },
   { path: '/register', element: <Register /> },
-  { path: '/forgot-password', element: <ForgotPassword /> },
-  { path: '/reset-password/:token', element: <ResetPassword /> },
-  { path: '/verify-email/:token', element: <VerifyEmail /> },
 
   // ── Donor routes ────────────────────────────
   {
